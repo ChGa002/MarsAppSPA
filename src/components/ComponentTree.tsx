@@ -4,20 +4,20 @@ const counterKey = "counter";
 
 const CountContext = React.createContext({
     count: 0,
-    setCount: () => {}
+    setCount: (count :number) => {}
 });
 
 function ComponentTree() {
     const [count, setCount] = useState(0);
 
-    // useEffect(() => {
-    //
-    //     if (count === 0) {
-    //        setCount(parseInt(localStorage.getItem(counterKey)));
-    //     } else {
-    //         localStorage.setItem(counterKey, count.toString());
-    //     }
-    // }, [count]);
+    useEffect(() => {
+
+        if (count === 0) {
+           setCount(parseInt(localStorage.getItem(counterKey) || '0'));
+        } else {
+            localStorage.setItem(counterKey, count.toString());
+        }
+    }, [count]);
 
     return (
         <CountContext.Provider value={{count, setCount}}>
@@ -29,9 +29,10 @@ function ComponentTree() {
 
 function Component2() {
 
+    const context = useContext(CountContext);
     return (
         <>
-            <button onClick={useContext(CountContext).setCount(useContext(CountContext).count + 1)}>
+            <button onClick={() => context.setCount(context.count + 1)} >
                 Clickable button
             </button>
         </>

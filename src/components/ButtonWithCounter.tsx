@@ -8,10 +8,10 @@ function ButtonWithCounter() {
     useEffect(() => {
         if (count === 0)
         {
-            setCount(parseInt(localStorage.getItem(counterKey)))
+            setCount(parseInt(localStorage.getItem(counterKey) || '0'))
         } else
         {
-            localStorage.setItem(counterKey, count)
+            localStorage.setItem(counterKey, count.toString())
         }
     }, [count]);
 
