@@ -1,24 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, {useContext} from "react";
+import {CountContext} from "../CounterContext";
 
-const counterKey = "counter";
 
 function ButtonWithCounter() {
-    const [count, setCount] = useState(0);
-
-    useEffect(() => {
-        if (count === 0)
-        {
-            setCount(parseInt(localStorage.getItem(counterKey) || '0'))
-        } else
-        {
-            localStorage.setItem(counterKey, count.toString())
-        }
-    }, [count]);
-
+    const countContext = useContext(CountContext)
     return (
         <>
-            <p>Click counter: {count}</p>
-            <button onClick={() => setCount(count + 1)}>
+            <button onClick={() => countContext.setCount(countContext.count + 1)}>
                 Clickable button
             </button>
         </>
