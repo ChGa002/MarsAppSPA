@@ -1,30 +1,37 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 
 const counterKey = "counter";
 
-function ComponentTree() {
+const CountContext = React.createContext({
+    count: 0,
+    setCount: () => {}
+});
 
+function ComponentTree() {
     const [count, setCount] = useState(0);
-    useEffect(() => {
-        if (count === 0) {
-            setCount(parseInt(localStorage.getItem(counterKey)))
-        } else {
-            localStorage.setItem(counterKey, count)
-        }
-    }, [count]);
+
+    // useEffect(() => {
+    //
+    //     if (count === 0) {
+    //        setCount(parseInt(localStorage.getItem(counterKey)));
+    //     } else {
+    //         localStorage.setItem(counterKey, count.toString());
+    //     }
+    // }, [count]);
 
     return (
-        <>
-            <Component2 setCount={setCount} count={count}></Component2>
-            <Component3 count={count}></Component3>
-        </>
+        <CountContext.Provider value={{count, setCount}}>
+            <Component2></Component2>
+            <Component3></Component3>
+        </CountContext.Provider>
     );
 }
 
-function Component2(props) {
+function Component2() {
+
     return (
         <>
-            <button onClick={() => props.setCount(props.count + 1)}>
+            <button onClick={useContext(CountContext).setCount(useContext(CountContext).count + 1)}>
                 Clickable button
             </button>
         </>
@@ -32,19 +39,19 @@ function Component2(props) {
 }
 
 
-function Component3(props) {
+function Component3() {
     return (
         <>
             <p> This is component 3 speaking </p>
-            <Component4 count={props.count}></Component4>
+            <Component4></Component4>
         </>
     );
 }
 
-function Component4(props) {
+function Component4() {
     return (
         <>
-            <p>Counter value : {props.count} </p>
+            <p>Counter value : {useContext(CountContext).count} </p>
 
         </>
     );
